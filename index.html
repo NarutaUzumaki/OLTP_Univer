@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Title</title>
+    <link rel="stylesheet" href="assest/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assest/css/main.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/7c0f7f8a2e.js" crossorigin="anonymous"></script>
+    <script src="assest/js/jquery-3.5.0.min.js"></script>
+    <script src="assest/js/popper.min.js"></script>
+    <script src="assest/js/bootstrap.min.js"></script>
+    <script src="assest/js/main.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-around text-center header-row">
+            <div class="col-12">
+                <h2>Auto parking</h2>
+            </div>
+            <div class="col-12 text-primary">
+                <h4 id="park-name">Park</h4>
+            </div>
+            <div class="col-12 col-md-5 col-lg-3">
+                <label for="">Places</label>
+                <span class="text-info" id="park-places">30</span>
+            </div>
+            <div class="col-12 col-lg-5">
+                <label for="">Car's quantity</label>
+                <span class="text-info" id="park-quantity">3</span>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <table class="table" id="automobile">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Car Number</th>
+                            <th scope="col" class="text-center">code</th>
+                            <th scope="col" class="text-center">Brend</th>
+                            <th scope="col" class="text-center">Owner</th>
+                            <th scope="col" class="text-center">Pass. count</th>
+                            <th scope="col" class="text-center">
+                                <button type="button" class="btn btn-success add-row"><i class="fas fa-plus-circle"></i></button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="table-row-prototype" auto_code="0">
+                            <th scope="row">1</th>
+                            <td id="car-0-number">1</td>
+                            <td id="car-0-code" class="text-center">1</td>
+                            <td id="car-0-brend" class="text-center">VAZ</td>
+                            <td id="car-0-owner" class="text-center">Davidych(not table value)</td>
+                            <td id="car-0-count" class="text-center">10</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-info edit-row"><i class="fas fa-pencil-alt"></i></button>
+                                <button type="button" class="btn btn-danger delete-row"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<!--    modal  EDIT-->
+    <div class="modal fade" id="editModal" tabindex="1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="" class="form-control" id="rowCode" placeholder="0">
+                    <input type="" class="form-control" id="rowOwnerCode" placeholder="0">
+                    <input type="" class="form-control" id="rowBrendCode" placeholder="0">
+                    <div class="form-group">
+                        <label for="rowBrend">Brend</label>
+                        <input type="text" class="form-control" id="rowBrend" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="rowOwner">Owner</label>
+                        <input type="text" class="form-control" id="rowOwner" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="rowPlaces">Places</label>
+                        <input type="number" class="form-control" id="rowPlaces" placeholder="0">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                    <button type="button" class="btn btn-primary" id="editModalSave">Зберегти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--modal2   ADD-->
+    <div class="modal fade" id="addModal" tabindex="1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Додати рядок</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="">ПІБ</label>
+                    </div>
+                    <input type="number" class="form-control" id="" placeholder="0">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
