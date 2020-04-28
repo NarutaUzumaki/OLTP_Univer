@@ -12,6 +12,7 @@ class Automobile implements JsonSerializable {
     private $codeBrend;
     private $autoBrend;
 
+    //                        1            2               3                     4                  5                  6                 7               8                  9
     function __construct(int $code, int $number, int $pass_place_count, int $code_owner, string $ownerName,  int $codeBrend, string $autoBrend, int $code_park, string $parkName){
         $this->code = $code;
         $this->number = $number;

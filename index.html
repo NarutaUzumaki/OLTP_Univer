@@ -79,9 +79,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="" class="form-control" id="rowCode" placeholder="0">
-                    <input type="" class="form-control" id="rowOwnerCode" placeholder="0">
-                    <input type="" class="form-control" id="rowBrendCode" placeholder="0">
+                    <input type="hidden" class="form-control" id="rowCode" placeholder="0">
+                    <input type="hidden" class="form-control" id="rowOwnerCode" placeholder="0">
+                    <input type="hidden" class="form-control" id="rowBrendCode" placeholder="0">
                     <div class="form-group">
                         <label for="rowBrend">Brend</label>
                         <input type="text" class="form-control" id="rowBrend" placeholder="0">
@@ -96,8 +96,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
-                    <button type="button" class="btn btn-primary" id="editModalSave">Зберегти</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editModalSave">Save</button>
                 </div>
             </div>
         </div>
@@ -107,16 +107,32 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Додати рядок</h5>
+                    <h5 class="modal-title" id="addModalLabel">Додати машину</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="">ПІБ</label>
+                        <label class="input-group-text" for="rowAddOwner">Owner</label>
+                        <input type="text" class="form-control" id="rowAddOwner" placeholder="Nobody">
                     </div>
-                    <input type="number" class="form-control" id="" placeholder="0">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="rowAddBrend">Brend</label>
+                        <input type="text" class="form-control" id="rowAddBrend" placeholder="No name">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="rowAddCarNumber">Car number</label>
+                        <input type="number" class="form-control" id="rowAddCarNumber" placeholder="0">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="rowAddPlaces">Places</label>
+                        <input type="number" class="form-control" id="rowAddPlaces" placeholder="0">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="addModalSave">Save</button>
                 </div>
             </div>
         </div>

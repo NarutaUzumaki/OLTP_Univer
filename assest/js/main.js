@@ -95,6 +95,35 @@ function editRow(rowCode){
 $().ready(()=>{
     getData();
 
+    $('.add-row').click(()=> {
+        $('#addModal').modal('show');
+    });
+
+    $('#addModalSave').click(()=>{
+        $.ajax({
+            type:"POST",
+            url: "/api/?action=insAutoRow",
+            data: {
+                'auto_row_code': 0,//because for new row it is a autoincrement value in DataBase
+                'auto_brend': $('#rowAddBrend').val(),
+                'owner_name': $('#rowAddOwner').val(),
+                'pass_places_count': $('#rowAddPlaces').val(),
+                'number': $('#rowAddCarNumber').val(),
+                'code_owner': 0,//because for new row it is a autoincrement value in DataBase
+                'code_brend': 0,//because for new row it is a autoincrement value in DataBase
+                'code_park': 3,
+                'park_name': 'The Ajax'
+            },
+            success: (result)=>{
+                console.log(result);
+                if (result.inserted){
+                    getData();
+                }
+                $('#addModal').modal('hide');
+            }
+        });
+    });
+
     $('#editModalSave').click(() =>{
         $.ajax({
             type: "POST",

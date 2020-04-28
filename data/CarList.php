@@ -159,45 +159,52 @@ class CarList implements JsonSerializable {
     }
 
     function writeToDB(){
-        //вся жопа тут, не хочет работать по сложному, сделать по простому через несколько if
+        //done;Шаблон для String "...'".$this->String."'..."
         $db = new DB();
-        //работет
-        $sqlForAuto = 'update automobiles set pass_place_count = '.$this->getPassPlaces().' where code = '.$this->code;
-        //не работает autoBrend
-        $sqlForBrend = 'update brends set auto_brend = '.$this->autoBrend.' where code = '.$this->codeBrend;
-        //не работает getOwnerName()
-        $sqlForOwner = 'update owners set last_name = '.$this->getOwnerName().' where code = '.$this->getCodeOwner();
+
+        $sqlForAuto = 'update automobiles set pass_place_count = '.$this->passPlaces.' where code = '.$this->code;
+
+        $sqlForBrend = "update brends set auto_brend = '".$this->autoBrend."' where code = ".$this->codeBrend;
+
+        $sqlForOwner = "update owners set last_name = '".$this->ownerName."' where code = ".$this->codeOwner;
 
 //        if ($db->runCommand($sqlForAuto) && $db->runCommand($sqlForBrend) && $db->runCommand($sqlForOwner)) {
-//            $db->runCommand($sqlForAuto);
-//            $db->runCommand($sqlForBrend);
-//            $db->runCommand($sqlForOwner);
+////            $db->runCommand($sqlForAuto);
+////            $db->runCommand($sqlForBrend);
+////            $db->runCommand($sqlForOwner);
 //            return true;
 ////            return $db->runCommand($sql);//runCommand?
 //        }else{
 //            return false;
 //        }
-
-        return $db->runCommand($sqlForBrend);
+        $db->runCommand($sqlForAuto);
+        $db->runCommand($sqlForBrend);
+        return $db->runCommand($sqlForOwner);
     }
 
     function insertToDB(){
         $db = new DB();
 
-        $sql = 'insert into owner(last_name) values({$this->getOwnerName()})';
-        $db->runCommand($sql);//runCommand?
+        //done
+        $sqlForOwner = "insert into owners(last_name) values('".$this->getAutomobile()->getOwnerName()."')";
+        $db->runCommand($sqlForOwner);
 
-        $sql = 'select SCOPE_IDENTITY() last_id';
-        $codeOwner = $db->makeQuery($sql);
+        $sqlForOwnerCode = 'select max(code) last_id from owners;';
+        $codeOwnerArr = $db->makeQuery($sqlForOwnerCode);
+        $codeOwner=$codeOwnerArr[0]['last_id'];
 
-        $sql = 'insert into automobiles(number,pass_place_count, code_owner, code_park) values({$this->getNumber()},{$this->getPassPlaceCount()},{$codeOwner}, 3)';
-        $db->runCommand($sql);
+        //done
+        $sqlForAutomobile = 'insert into automobiles(number,pass_place_count, code_owner, code_park) values('.$this->getAutomobile()->getNumber().','.$this->getAutomobile()->getPassPlaceCount().','.$codeOwner.', 3)';
+        $db->runCommand($sqlForAutomobile);
 
-        $sql = 'select SCOPE_IDENTITY() last_id';
-        $codeCar = $db->makeQuery($sql);
+        $sqlForBrendCode = 'select max(code) last_id from automobiles;';
+        $codeCarArr = $db->makeQuery($sqlForBrendCode);
+        $codeCar = $codeCarArr[0]['last_id'];
 
-        $sql = 'insert into brends(code_car,auto_brend) values({$codeCar, $this->getAutoBrend()})';
-        $db->runCommand($sql);
+        //done
+        $sqlForBrend = "insert into brends(code_car, auto_brend) values(".$codeCar.", '".$this->getAutomobile()->getAutoBrend()."')";
+
+        return $db->runCommand($sqlForBrend);
     }
 }
 
