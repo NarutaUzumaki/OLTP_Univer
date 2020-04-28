@@ -21,7 +21,7 @@ if ($_GET['action'] == 'getAuto'){
     $carList->setCodeBrend((int)$_POST['code_brend']);
     $data = ['updated' => $carList->writeToDB()];
 }elseif ($_GET['action'] == 'remAutoRow'){
-    $carList = new CarList((int)$_GET['auto_row_code']);
+    $carList = new CarList((int)$_POST['auto_row_code']);
     $data = ['deleted' => $carList->remFromDB()];
 }elseif ($_GET['action'] == 'insAutoRow'){
     $carList = new CarList(0);

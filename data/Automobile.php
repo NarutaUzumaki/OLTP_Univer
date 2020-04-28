@@ -2,15 +2,15 @@
 
 //main table
 class Automobile implements JsonSerializable {
-    private $code;
-    private $number;
-    private $pass_place_count;
-    private $code_owner;
-    private $ownerName;
-    private $code_park;
-    private $parkName;
-    private $codeBrend;
-    private $autoBrend;
+    private $code; //код машини з таблиці automobiles
+    private $number; //номер машини з таблиці automobiles
+    private $pass_place_count; // кілкість пасажирських мість з таблиці automobiles
+    private $code_owner; //код власника машини з таблиці owners та в таблиці automobiles
+    private $ownerName; //ім'я власника машини з таблиці owners
+    private $code_park; //код парку з таблиці car_park у якому машину припарковано
+    private $parkName; //назва парку з таблиці car_park
+    private $codeBrend; //код машини з таблиці brends(посилається на код у таблицю automobiles)
+    private $autoBrend; //марка машини з таблиці brends
 
     //                        1            2               3                     4                  5                  6                 7               8                  9
     function __construct(int $code, int $number, int $pass_place_count, int $code_owner, string $ownerName,  int $codeBrend, string $autoBrend, int $code_park, string $parkName){

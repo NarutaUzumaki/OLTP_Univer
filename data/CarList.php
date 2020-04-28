@@ -154,8 +154,22 @@ class CarList implements JsonSerializable {
 
     function remFromDB(){
         $db = new DB();
-        $sql = 'delete from automobiles where code = '. $this->code;
-        return $db->runCommand($sql);//runCommand()?
+        $sqlDeleteBrend = 'delete from brends where code_car = '.$this->code;
+        $db->runCommand($sqlDeleteBrend);
+
+        $sqlForOwnerCode = 'select code_owner from automobiles where code = '.$this->code;
+        $codeOwnerArr = $db->makeQuery($sqlForOwnerCode);
+        $codeOwner = $codeOwnerArr[0]['code_owner'];
+
+        $sqlDeleteAuto = 'delete from automobiles where code = '. $this->code;
+        $db->runCommand($sqlDeleteAuto);
+
+        //$sqlForOwnerCode = 'select code_owner from automobiles where code = '.$this->code;
+        $sqlDeleteOwner = 'delete from owners where code = '.$codeOwner;
+        //brend
+        //auto
+        //owner
+        return $db->runCommand($sqlDeleteOwner);
     }
 
     function writeToDB(){

@@ -58,6 +58,7 @@ function updateTable({rows}){
 }
 
 function deleteRow(rowCode){
+    console.log(rowCode);
     $.ajax({
         type: "POST",
         url: "/api/?action=remAutoRow",
@@ -65,6 +66,7 @@ function deleteRow(rowCode){
             'auto_row_code':rowCode
         },
         success: (result) =>{
+            console.log(result);
             if (result.deleted){
                 $(`tr[auto_code=${rowCode}]`).remove();
                 $(`tr[auto_code]`).each(function(i,elem){
