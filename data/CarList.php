@@ -98,31 +98,23 @@ class CarList implements JsonSerializable {
     function readFromDB(){
         $db = new DB();
 
-        $sql = 'select code, name, park_place_count, car_quantity from car_park
-                where code = ' . $this->code;
-        $park_head = $db->makeQuery($sql);
-        if(!$park_head || !$park_head[0]){
-            return false;
+        $res = $db->runSP('getReadingData',[
+            [$this->code, 'in']
+        ]);
+        if (!$res){
+            return $res;
         }
+
+
+        $park_head = $res[1];
         $this->parking = new Parking($park_head[0]['code'],$park_head[0]['name'],$park_head[0]['park_place_count'],$park_head[0]['car_quantity']);
 
-        //var_dump($this->code);//null
-        $sql = 'select automobiles.code acode, number, pass_place_count, brends.code bcode, auto_brend, owners.code ocode, last_name, automobiles.code_park, car_park.name
-                from automobiles
-                inner join owners on automobiles.code_owner = owners.code
-                inner join brends on automobiles.code = brends.code_car
-                inner join car_park on automobiles.code_park = car_park.code
-                where automobiles.code_park = ' . $this->code;
 
-        if ($carList = $db->makeQuery($sql)){
+        $carList = $res[0];
             foreach ($carList as $row){
-                //var_dump($row['code']);
                 $this->rows[] = new Automobile($row['acode'], $row['number'], $row['pass_place_count'], $row['ocode'], $row['last_name'], $row['bcode'], $row['auto_brend'],$row['code_park'], $row['name']);
             }
-        }
-        //var_dump($this->rows);
-        //var_dump($this->rows);
-        return $this->rows;
+        return true;
     }
 
     public function jsonSerialize()
@@ -136,117 +128,57 @@ class CarList implements JsonSerializable {
 
     function readRowFromDB(){
         $db = new DB();
-        $sql = 'select automobiles.code acode, number, pass_place_count, brends.code bcode, auto_brend, owners.code ocode, last_name, automobiles.code_park, car_park.name
-                from automobiles
-                inner join owners on automobiles.code_owner = owners.code
-                inner join brends on automobiles.code = brends.code_car
-                inner join car_park on automobiles.code_park = car_park.code
-                where automobiles.code = '. $this->code;
-        $row = $db->makeQuery($sql);
-        if(!$row || !$row[0]){
-            var_dump('Fail');
-            return false;
+
+        $res = $db->runSP('getReadingDataRow',[
+            [$this->code, 'in']
+        ]);
+        if (!$res){
+            return $res;
         }
+        $row = $res[0];
+
         $this->automobile = new Automobile($row[0]['acode'], $row[0]['number'], $row[0]['pass_place_count'], $row[0]['ocode'], $row[0]['last_name'], $row[0]['bcode'], $row[0]['auto_brend'],$row[0]['code_park'], $row[0]['name']);
-/*        echo "<script>console.log(<?php $this->automobile; ?>)</script>";*/
         return true;
     }
 
     function remFromDB(){
         $db = new DB();
-        $sqlDeleteBrend = 'delete from brends where code_car = '.$this->code;
-        $db->runCommand($sqlDeleteBrend);
 
-        $sqlForOwnerCode = 'select code_owner from automobiles where code = '.$this->code;
-        $codeOwnerArr = $db->makeQuery($sqlForOwnerCode);
-        $codeOwner = $codeOwnerArr[0]['code_owner'];
-
-        $sqlDeleteAuto = 'delete from automobiles where code = '. $this->code;
-        $db->runCommand($sqlDeleteAuto);
-
-        //$sqlForOwnerCode = 'select code_owner from automobiles where code = '.$this->code;
-        $sqlDeleteOwner = 'delete from owners where code = '.$codeOwner;
-        //brend
-        //auto
-        //owner
-        return $db->runCommand($sqlDeleteOwner);
+        $stat = 0;
+        $db->runSP('removeDataFromDB',[
+            [$this->code, 'in'],
+            [&$stat, 'out']
+        ]);
+        return(bool)$stat;
     }
 
     function writeToDB(){
         //done;Шаблон для String "...'".$this->String."'..."
         $db = new DB();
-
-        $sqlForAuto = 'update automobiles set pass_place_count = '.$this->passPlaces.' where code = '.$this->code;
-
-        $sqlForBrend = "update brends set auto_brend = '".$this->autoBrend."' where code = ".$this->codeBrend;
-
-        $sqlForOwner = "update owners set last_name = '".$this->ownerName."' where code = ".$this->codeOwner;
-
-//        if ($db->runCommand($sqlForAuto) && $db->runCommand($sqlForBrend) && $db->runCommand($sqlForOwner)) {
-////            $db->runCommand($sqlForAuto);
-////            $db->runCommand($sqlForBrend);
-////            $db->runCommand($sqlForOwner);
-//            return true;
-////            return $db->runCommand($sql);//runCommand?
-//        }else{
-//            return false;
-//        }
-        $db->runCommand($sqlForAuto);
-        $db->runCommand($sqlForBrend);
-        return $db->runCommand($sqlForOwner);
+        $stat = 0;
+        $db->runSP('writeDataToDB',[
+            [$this->passPlaces, 'in'],
+            [$this->code, 'in'],
+            [$this->autoBrend, 'in'],
+            [$this->codeBrend, 'in'],
+            [$this->ownerName, 'in'],
+            [$this->codeOwner, 'in'],
+            [&$stat, 'out']
+        ]);
+        return(bool)$stat;
     }
 
     function insertToDB(){
         $db = new DB();
 
-        //done
-        $sqlForOwner = "insert into owners(last_name) values('".$this->getAutomobile()->getOwnerName()."')";
-        $db->runCommand($sqlForOwner);
-
-        $sqlForOwnerCode = 'select max(code) last_id from owners;';
-        $codeOwnerArr = $db->makeQuery($sqlForOwnerCode);
-        $codeOwner=$codeOwnerArr[0]['last_id'];
-
-        //done
-        $sqlForAutomobile = 'insert into automobiles(number,pass_place_count, code_owner, code_park) values('.$this->getAutomobile()->getNumber().','.$this->getAutomobile()->getPassPlaceCount().','.$codeOwner.', 3)';
-        $db->runCommand($sqlForAutomobile);
-
-        $sqlForBrendCode = 'select max(code) last_id from automobiles;';
-        $codeCarArr = $db->makeQuery($sqlForBrendCode);
-        $codeCar = $codeCarArr[0]['last_id'];
-
-        //done
-        $sqlForBrend = "insert into brends(code_car, auto_brend) values(".$codeCar.", '".$this->getAutomobile()->getAutoBrend()."')";
-
-        return $db->runCommand($sqlForBrend);
-    }
-}
-
-
-class CarRow{
-    private $code;
-    private $carList;
-    private $automobile;
-    private $brend;
-    private $owner;
-
-    function __construct( CarList $carList, Automobile $automobile, Brend $brend, Owner $owner){
-        //$this->code = $code;
-        $this->carList = $carList;
-        $this->automobile = $automobile;
-        $this->brend = $brend;
-        $this->owner = $owner;
-    }
-
-    function getAutomobile(){
-        return $this->automobile;
-    }
-
-    function getBrend(){
-        return $this->brend;
-    }
-
-    function getOwner(){
-        return $this->owner;
+        $stat = 0;
+        $db->runSP('insertDataToDB',[
+            [$this->getAutomobile()->getOwnerName(), 'in'],
+            [$this->getAutomobile()->getNumber(), 'in'],
+            [$this->getAutomobile()->getPassPlaceCount(), 'in'],
+            [$this->getAutomobile()->getAutoBrend(), 'in'],
+            [&$stat, 'out']
+        ]);
+        return(bool)$stat;
     }
 }

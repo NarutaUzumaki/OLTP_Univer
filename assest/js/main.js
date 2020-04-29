@@ -140,6 +140,7 @@ $().ready(()=>{
             },
 
             success: (result) => {
+                console.log(result);
                 if (result.updated){
                     $(`#car-${$('#rowCode').val()}-brend`).html($('#rowBrend').val());
                     $(`#car-${$('#rowCode').val()}-owner`).html($('#rowOwner').val());

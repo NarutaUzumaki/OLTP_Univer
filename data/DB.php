@@ -74,4 +74,45 @@ class DB{
             return false;
         }
     }
+
+    function runSP(string $spName, array $params = []){
+        try {
+            if ($this->conn || $this->connect()) {
+                $reslut = [];
+
+                $str = str_repeat("?, ", count($params));
+                if (strlen($str) > 0) {
+                    $str = substr($str, 0, strlen($str) - 2);
+                }
+                $sqlText = "exec $spName $str";
+
+                foreach ($params as $key => $param) {
+                    if (isset($param[1]) && $param[1] == 'out') {
+                        $params[$key][1] = SQLSRV_PARAM_OUT;
+                    } else {
+                        $params[$key][1] = SQLSRV_PARAM_IN;
+                    }
+                }
+                $sql_stmt = sqlsrv_prepare($this->conn, $sqlText, $params);
+                sqlsrv_execute($sql_stmt);
+                while ($row = sqlsrv_fetch_array($sql_stmt, SQLSRV_FETCH_ASSOC)) {
+                    $one_result[] = $row;
+                }
+                $reslut[] = $one_result;
+
+                while (sqlsrv_next_result($sql_stmt)){
+                    $one_result = [];
+                    while ($row = sqlsrv_fetch_array($sql_stmt, SQLSRV_FETCH_ASSOC)){
+                        $one_result[] = $row;
+                    }
+                    $reslut[] = $one_result;
+                }
+                return $reslut;
+            }
+        }
+        catch (Exception $e){
+            $this->errText = "Error in SP method";
+            return false;
+        }
+    }
 }
