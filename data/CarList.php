@@ -173,11 +173,11 @@ class CarList implements JsonSerializable {
 
         $stat = 0;
         $db->runSP('insertDataToDB',[
-            [$this->getAutomobile()->getOwnerName(), 'in'],
-            [$this->getAutomobile()->getNumber(), 'in'],
-            [$this->getAutomobile()->getPassPlaceCount(), 'in'],
-            [$this->getAutomobile()->getAutoBrend(), 'in'],
-            [&$stat, 'out']
+            [$this->getAutomobile()->getOwnerName(), 'in'],         //ім'я власника авто
+            [$this->getAutomobile()->getNumber(), 'in'],            //номер машини на автостоянці
+            [$this->getAutomobile()->getPassPlaceCount(), 'in'],    //кількість пасажирських місць
+            [$this->getAutomobile()->getAutoBrend(), 'in'],         //марка авто
+            [&$stat, 'out']                                         //результуючий параметр
         ]);
         return(bool)$stat;
     }
