@@ -99,7 +99,7 @@ class CarList implements JsonSerializable {
         $db = new DB();
 
         $res = $db->runSP('getReadingData',[
-            [$this->code, 'in']
+            [$this->code, PDO::PARAM_INT]
         ]);
         if (!$res){
             return $res;
@@ -130,7 +130,7 @@ class CarList implements JsonSerializable {
         $db = new DB();
 
         $res = $db->runSP('getReadingDataRow',[
-            [$this->code, 'in']
+            [$this->code, PDO::PARAM_INT]
         ]);
         if (!$res){
             return $res;
@@ -146,8 +146,8 @@ class CarList implements JsonSerializable {
 
         $stat = 0;
         $db->runSP('removeDataFromDB',[
-            [$this->code, 'in'],
-            [&$stat, 'out']
+            [$this->code, PDO::PARAM_INT],
+            [&$stat, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT, 8, 'out']
         ]);
         return(bool)$stat;
     }
@@ -156,14 +156,15 @@ class CarList implements JsonSerializable {
         //done;Шаблон для String "...'".$this->String."'..."
         $db = new DB();
         $stat = 0;
+
         $db->runSP('writeDataToDB',[
-            [$this->passPlaces, 'in'],
-            [$this->code, 'in'],
-            [$this->autoBrend, 'in'],
-            [$this->codeBrend, 'in'],
-            [$this->ownerName, 'in'],
-            [$this->codeOwner, 'in'],
-            [&$stat, 'out']
+            [$this->passPlaces, PDO::PARAM_INT],
+            [$this->code, PDO::PARAM_INT],
+            [$this->autoBrend, PDO::PARAM_STR],
+            [$this->codeBrend, PDO::PARAM_INT],
+            [$this->ownerName, PDO::PARAM_STR],
+            [$this->codeOwner, PDO::PARAM_INT],
+            [&$stat, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT, 8, 'out'],
         ]);
         return(bool)$stat;
     }
@@ -173,11 +174,11 @@ class CarList implements JsonSerializable {
 
         $stat = 0;
         $db->runSP('insertDataToDB',[
-            [$this->getAutomobile()->getOwnerName(), 'in'],         //ім'я власника авто
-            [$this->getAutomobile()->getNumber(), 'in'],            //номер машини на автостоянці
-            [$this->getAutomobile()->getPassPlaceCount(), 'in'],    //кількість пасажирських місць
-            [$this->getAutomobile()->getAutoBrend(), 'in'],         //марка авто
-            [&$stat, 'out']                                         //результуючий параметр
+            [$this->getAutomobile()->getOwnerName(), PDO::PARAM_STR],         //ім'я власника авто
+            [$this->getAutomobile()->getNumber(), PDO::PARAM_INT],            //номер машини на автостоянці
+            [$this->getAutomobile()->getPassPlaceCount(), PDO::PARAM_INT],    //кількість пасажирських місць
+            [$this->getAutomobile()->getAutoBrend(), PDO::PARAM_STR],         //марка авто
+            [&$stat, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT, 8, 'out']      //результуючий параметр
         ]);
         return(bool)$stat;
     }
