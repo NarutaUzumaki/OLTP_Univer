@@ -1,0 +1,11 @@
+{
+    "require": {
+        "doctrine/orm": "^2.7",
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "doctrine/src/"
+        }
+    },
+}
